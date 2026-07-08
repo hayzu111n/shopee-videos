@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0d0d12" />
+<title>Story → Shopee</title>
+<style>
+  :root{
+    --bg:#0d0d12; --panel:#14141c; --card:#1a1a24; --card2:#22222f; --line:#2b2b3a;
+    --txt:#f4f4f8; --mut:#9a9ab0;
+    --shopee:#ee4d2d; --ig1:#feda75; --ig2:#d62976; --ig3:#962fbf;
+    --ok:#25c26e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:inherit}
+  button{font-family:inherit}
+
+  /* topo */
+  header.top{display:flex;align-items:center;gap:14px;padding:14px 22px;
+    border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:10}
+  .logo{width:40px;height:40px;border-radius:12px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--ig1),var(--ig2) 55%,var(--shopee));
+    display:grid;place-items:center;font-weight:800;color:#fff;font-size:19px}
+  header.top h1{font-size:18px;margin:0}
+  header.top p{margin:2px 0 0;font-size:12px;color:var(--mut)}
+  .searchbar{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .at{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+    border-radius:11px;padding:0 12px;height:42px}
+  .at span{color:var(--mut);font-size:18px}
+  .at input{background:transparent;border:0;outline:0;color:var(--txt);font-size:15px;width:210px}
+  .btn{border:0;border-radius:11px;font-weight:700;font-size:14px;padding:0 16px;height:42px;
+    color:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+  .btn.primary{background:linear-gradient(135deg,var(--ig2),var(--shopee))}
+  .btn.primary:disabled{opacity:.55;cursor:default}
+  .btn.ghost{background:var(--card2);border:1px solid var(--line)}
+  .btn.shopee{background:var(--shopee)}
+  .btn.ok{background:#1f3d2c;border:1px solid #235c3b;color:#8ff0b8}
+  .btn.sm{height:36px;padding:0 12px;font-size:13px;border-radius:9px}
+  .btn.xs{height:30px;padding:0 10px;font-size:12px;border-radius:8px}
+
+  /* layout duas colunas */
+  .app{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 71px)}
+  aside{border-right:1px solid var(--line);background:var(--panel);padding:14px;overflow:auto}
+  main{padding:22px 26px;overflow:auto}
+
+  .side-title{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);
+    margin:4px 4px 10px;font-weight:700}
+  .day{margin-bottom:14px}
+  .day .dh{font-weight:800;font-size:13px;color:#fff;padding:6px 8px;display:flex;align-items:center;gap:8px}
+  .day .dh .n{margin-left:auto;font-size:11px;color:var(--mut);font-weight:600}
+  .acct{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:10px;cursor:pointer}
+  .acct:hover{background:var(--card)}
+  .acct.active{background:var(--card2);outline:1px solid #3a3a52}
+  .acct img{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#333;flex:0 0 auto}
+  .acct .u{font-weight:600;font-size:13px}
+  .acct .c{font-size:11px;color:var(--mut)}
+  .acct .del{margin-left:auto;background:transparent;border:0;color:#6a6a80;font-size:15px;cursor:pointer;padding:2px 6px}
+  .acct .del:hover{color:#ff6b6b}
+
+  /* main */
+  .msg{border-radius:11px;padding:11px 14px;font-size:13px;margin-bottom:16px;line-height:1.45}
+  .msg.err{background:#3a1518;border:1px solid #742;color:#ffb4a8}
+  .msg.warn{background:#3a2f12;border:1px solid #6a5312;color:#ffe08a}
+  .msg.info{background:#12233a;border:1px solid #244a74;color:#a9d0ff}
+
+  .detail-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .detail-head img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#333}
+  .detail-head .u{font-weight:800;font-size:18px}
+  .detail-head .d{font-size:13px;color:var(--mut)}
+  .detail-head .sp{margin-left:auto;display:flex;gap:8px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+  .creative{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    display:flex;flex-direction:column}
+  .creative .idx{position:absolute;margin:8px;background:#000a;border-radius:8px;padding:3px 8px;
+    font-size:12px;font-weight:800}
+  .creative .media{width:100%;background:#000;display:block;aspect-ratio:9/16;object-fit:contain}
+  .creative .body{padding:12px;display:flex;flex-direction:column;gap:10px}
+  .creative .actions{display:flex;gap:8px}
+  .creative .actions .btn{flex:1}
+  .lk{display:flex;align-items:center;gap:8px;background:#0f0f16;border:1px solid var(--line);
+    border-radius:10px;padding:8px 10px;font-size:12px}
+  .lk .txt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mut)}
+  .lk.shopee{border-color:#5a2a1a;background:#241511}
+  .lk.shopee .txt{color:#ffc9b3}
+  .badge{font-size:10px;font-weight:800;padding:2px 6px;border-radius:6px;background:var(--shopee);color:#fff}
+  .empty{text-align:center;color:var(--mut);padding:70px 10px;font-size:15px;line-height:1.6}
+  .spin{width:16px;height:16px;border:2px solid #fff5;border-top-color:#fff;border-radius:50%;
+    animation:sp .7s linear infinite;display:inline-block}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hide{display:none!important}
+
+  /* cookie modal */
+  .modal-bg{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;
+    width:min(560px,92vw)}
+  .modal h3{margin:0 0 8px}
+  .modal textarea{width:100%;min-height:90px;margin-top:10px;background:#0f0f16;color:var(--txt);
+    border:1px solid var(--line);border-radius:9px;padding:10px;font-size:12px;resize:vertical}
+  .modal .row{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+  .small{font-size:12px;color:var(--mut);line-height:1.6}
+
+  @media(max-width:820px){
+    .app{grid-template-columns:1fr}
+    aside{border-right:0;border-bottom:1px solid var(--line);max-height:38vh}
+    header.top{flex-wrap:wrap}
+    .searchbar{margin-left:0;width:100%}
+    .at input{width:100%;flex:1}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">S</div>
+  <div>
+    <h1>Story → Shopee</h1>
+    <p>Capture os criativos e os links da Shopee — gravados no servidor</p>
+  </div>
+  <div class="searchbar">
+    <button class="btn ghost" id="cookieBtn" title="Cookie do Instagram">🍪 Cookie</button>
+    <div class="at"><span>@</span><input id="user" placeholder="usuario" autocapitalize="off" autocomplete="off" spellcheck="false"/></div>
+    <button id="check" class="btn primary">Check Story</button>
+  </div>
+</header>
+
+<div class="app">
+  <aside>
+    <div class="side-title">Histórico por data</div>
+    <div id="hist"></div>
+  </aside>
+  <main>
+    <div id="alert"></div>
+    <div id="detail"><div class="empty">Selecione uma captura no histórico<br>ou cole um <b>@</b> e clique em <b>Check Story</b>.</div></div>
+  </main>
+</div>
+
+<!-- cookie modal -->
+<div id="cookieModal" class="modal-bg hide">
+  <div class="modal">
+    <h3>🍪 Cookie do Instagram (opcional)</h3>
+    <div class="small">
+      Aumenta a taxa de sucesso e libera contas que exigem login. Use a extensão
+      <b>Get cookies.txt LOCALLY</b> no instagram.com (logado), copie e cole abaixo.
+      Fica salvo só neste navegador.<br>
+      O essencial é a linha <code>sessionid=...</code>.<br><br>
+      <b>Dica pro:</b> se quiser deixar fixo pra todo mundo, no Netlify em
+      <i>Site settings → Environment variables</i> crie <code>IG_COOKIE</code> com o mesmo valor.
+    </div>
+    <textarea id="cookie" placeholder="sessionid=xxxx; csrftoken=yyyy; ds_user_id=zzzz"></textarea>
+    <div class="row">
+      <button class="btn ghost sm" id="cookieClose">Fechar</button>
+      <button class="btn ok sm" id="cookieSave">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const F = "/.netlify/functions";
+const LS_COOKIE = "story_shopee_cookie_v2";
+const $ = (s,r=document)=>r.querySelector(s);
+const el = (h)=>{const d=document.createElement("div");d.innerHTML=h.trim();return d.firstChild;};
+let DB = { byDate:{} };
+let current = null; // {date, username}
+
+function fmtDate(k){const[y,m,d]=k.split("-");return d+"/"+m+"/"+y;}
+function getCookie(){return localStorage.getItem(LS_COOKIE)||"";}
+function alertBox(t,m){$("#alert").innerHTML = m?`<div class="msg ${t}">${m}</div>`:"";}
+function mediaUrl(date,user,idx,poster,dl){
+  const kind = poster?"poster":"media";
+  let u = `${F}/media?key=${kind}:${date}:${user}:${idx}`;
+  if(dl) u+="&dl=1";
+  return u;
+}
+function isShopee(l){return /shopee\./i.test(l)||/shp\.ee/i.test(l)||/s\.shopee/i.test(l);}
+
+/* cookie modal */
+$("#cookieBtn").onclick=()=>{$("#cookie").value=getCookie();$("#cookieModal").classList.remove("hide");};
+$("#cookieClose").onclick=()=>$("#cookieModal").classList.add("hide");
+$("#cookieSave").onclick=()=>{localStorage.setItem(LS_COOKIE,$("#cookie").value.trim());$("#cookieModal").classList.add("hide");alertBox("info","Cookie salvo neste navegador.");};
+
+/* carregar histórico do servidor */
+async function loadHist(){
+  try{
+    const r=await fetch(`${F}/history`);
+    DB=await r.json();
+    if(DB.error){alertBox("err","Erro ao ler histórico: "+DB.error);DB={byDate:{}};}
+  }catch(e){alertBox("err","Falha de rede ao ler histórico: "+e.message);DB={byDate:{}};}
+  renderHist();
+}
+
+function renderHist(){
+  const wrap=$("#hist");wrap.innerHTML="";
+  const dates=Object.keys(DB.byDate||{}).sort().reverse();
+  if(!dates.length){wrap.innerHTML='<div class="small" style="padding:8px">Nada capturado ainda.</div>';return;}
+  for(const date of dates){
+    const accts=DB.byDate[date];
+    const total=accts.reduce((a,c)=>a+(c.count||0),0);
+    const day=el(`<div class="day"><div class="dh">${fmtDate(date)}<span class="n">${accts.length} conta(s) · ${total} criativo(s)</span></div></div>`);
+    accts.sort((a,b)=>(b.capturedAt||0)-(a.capturedAt||0));
+    for(const c of accts){
+      const active = current && current.date===date && current.username===c.username;
+      const row=el(`<div class="acct ${active?'active':''}">
+        <img src="${c.profile_pic||''}" onerror="this.style.visibility='hidden'"/>
+        <div><div class="u">@${c.username}</div><div class="c">${c.count||0} criativo(s)${c.warning?' · aviso':''}</div></div>
+        <button class="del" title="Excluir">✕</button>
+      </div>`);
+      row.onclick=(ev)=>{if(ev.target.classList.contains("del"))return;openDetail(date,c.username);};
+      row.querySelector(".del").onclick=async(ev)=>{
+        ev.stopPropagation();
+        if(!confirm(`Excluir captura de @${c.username} em ${fmtDate(date)}?`))return;
+        await fetch(`${F}/remove?date=${date}&username=${encodeURIComponent(c.username)}`);
+        if(current&&current.date===date&&current.username===c.username){current=null;$("#detail").innerHTML='<div class="empty">Captura excluída.</div>';}
+        await loadHist();
+      };
+      day.appendChild(row);
+    }
+    wrap.appendChild(day);
+  }
+}
+
+function findCapture(date,user){
+  return (DB.byDate[date]||[]).find(c=>c.username===user);
+}
+
+function openDetail(date,user){
+  current={date,username:user};
+  renderHist();
+  const c=findCapture(date,user);
+  if(!c){$("#detail").innerHTML='<div class="empty">Captura não encontrada.</div>';return;}
+  let html=`<div class="detail-head">
+    <img src="${c.profile_pic||''}" onerror="this.style.visibility='hidden'"/>
+    <div><div class="u">@${c.username}</div><div class="d">${fmtDate(date)} · ${c.count||0} criativo(s)</div></div>
+    <div class="sp"><button class="btn ghost sm" onclick="reCheck('${c.username}')">↻ Recapturar</button></div>
+  </div>`;
+  if(c.warning)html+=`<div class="msg warn">${c.warning}</div>`;
+  if(!c.items||!c.items.length){html+=`<div class="empty">Sem criativos nesta captura.</div>`;$("#detail").innerHTML=html;return;}
+
+  html+='<div class="grid">';
+  c.items.forEach(it=>{
+    const src=mediaUrl(date,user,it.idx,false,false);
+    const poster=it.posterStored?mediaUrl(date,user,it.idx,true,false):'';
+    const media = it.type==="video"
+      ? `<video class="media" src="${src}" poster="${poster}" controls playsinline preload="metadata"></video>`
+      : `<img class="media" src="${src}"/>`;
+    let links="";
+    (it.links||[]).forEach(l=>{
+      const s=isShopee(l);
+      links+=`<div class="lk ${s?'shopee':''}">
+        ${s?'<span class="badge">SHOPEE</span>':''}
+        <span class="txt">${l}</span>
+        <button class="btn ${s?'shopee':'ghost'} xs" onclick="openLink('${encodeURIComponent(l)}')">Abrir</button>
+      </div>`;
+    });
+    if(!(it.links||[]).length)links=`<div class="small">Sem link neste criativo.</div>`;
+    const dlUrl=mediaUrl(date,user,it.idx,false,true);
+    html+=`<div class="creative" style="position:relative">
+      <div class="idx">#${it.idx+1}</div>
+      ${media}
+      <div class="body">
+        <div class="actions">
+          <a class="btn primary sm" href="${dlUrl}" download>⬇ Baixar</a>
+          <button class="btn ghost sm" onclick="shareMedia('${src}',${it.type==='video'?1:0},'@${c.username}')">↗ Compartilhar</button>
+        </div>
+        ${links}
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+  $("#detail").innerHTML=html;
+  $("#alert").innerHTML="";
+  window.scrollTo(0,0);
+}
+
+/* check story */
+$("#check").onclick=checkStory;
+$("#user").addEventListener("keydown",e=>{if(e.key==="Enter")checkStory();});
+function reCheck(u){$("#user").value=u;checkStory();}
+
+async function checkStory(){
+  let u=$("#user").value.trim().replace(/^@/,"").replace(/\/+$/,"");
+  if(!u){alertBox("err","Digite um @usuario.");return;}
+  const btn=$("#check");btn.disabled=true;const old=btn.innerHTML;btn.innerHTML='<span class="spin"></span>';
+  alertBox("info","Capturando e gravando os stories de @"+u+"… (pode levar alguns segundos)");
+  try{
+    let url=`${F}/check?username=${encodeURIComponent(u)}`;
+    const ck=getCookie();if(ck)url+="&cookie="+encodeURIComponent(ck);
+    const r=await fetch(url);
+    const data=await r.json();
+    if(data.error){alertBox("err","Erro: "+data.error);return;}
+    await loadHist();
+    openDetail(data.date,data.username);
+    if(!data.items||!data.items.length)alertBox("warn",data.warning||"Nenhum story ativo agora.");
+    else alertBox("info",data.count+" criativo(s) gravado(s) no servidor.");
+  }catch(e){alertBox("err","Falha de rede: "+e.message);}
+  finally{btn.disabled=false;btn.innerHTML=old;}
+}
+
+/* links / deep link shopee */
+function openLink(enc){
+  const url=decodeURIComponent(enc);
+  if(isShopee(url)){
+    const deep="shopee://"+url.replace(/^https?:\/\//,"");
+    const t=Date.now();
+    // no desktop o deep link falha e cai direto no navegador
+    try{window.location.href=deep;}catch(e){}
+    setTimeout(()=>{if(Date.now()-t<1600)window.open(url,"_blank");},1000);
+  }else window.open(url,"_blank");
+}
+
+/* compartilhar (Web Share API — funciona no mobile; no desktop baixa) */
+async function shareMedia(src,isVideo,uname){
+  try{
+    const r=await fetch(src);const blob=await r.blob();
+    const file=new File([blob],isVideo?"story.mp4":"story.jpg",{type:blob.type||(isVideo?"video/mp4":"image/jpeg")});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],text:"Criativo "+uname});
+    }else{
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=file.name;
+      document.body.appendChild(a);a.click();a.remove();
+    }
+  }catch(e){if(e.name!=="AbortError")window.open(src,"_blank");}
+}
+
+/* init */
+loadHist();
+</script>
+</body>
+</html>
