@@ -2,7 +2,7 @@
 // Apaga uma captura (metadados + midias gravadas) do servidor.
 // GET /.netlify/functions/remove?date=2026-07-07&username=fulano
 
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +11,7 @@ const cors = {
 
 export const handler = async (event) => {
   try {
+    connectLambda(event);
     const p = event.queryStringParameters || {};
     const date = (p.date || "").trim();
     const username = (p.username || "").trim().replace(/^@/, "");
