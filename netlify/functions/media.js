@@ -3,7 +3,7 @@
 // GET /.netlify/functions/media?key=media:2026-07-07:fulano:0[&dl=1]
 //   dl=1  -> forca download (Content-Disposition: attachment)
 
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 
 export const handler = async (event) => {
   const p = event.queryStringParameters || {};
@@ -12,6 +12,7 @@ export const handler = async (event) => {
     return { statusCode: 400, body: "key invalida" };
 
   try {
+    connectLambda(event);
     const store = getStore("story-shopee");
     const res = await store.getWithMetadata(key, { type: "arrayBuffer" });
     if (!res || !res.data) return { statusCode: 404, body: "nao encontrado" };
