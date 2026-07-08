@@ -5,7 +5,7 @@
 //
 // GET /.netlify/functions/check?username=@fulano[&cookie=...]
 
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 
 const APP_ID = "936619743392459";
 
@@ -108,6 +108,7 @@ const cors = {
 export const handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers: cors, body: "" };
   try {
+    connectLambda(event);
     const p = event.queryStringParameters || {};
     let username = (p.username || p.user || "").trim().replace(/^@/, "").replace(/\/+$/, "");
     if (!username)
